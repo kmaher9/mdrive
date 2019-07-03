@@ -1,4 +1,4 @@
-# mdrive
+# MDrive
 A purpose built file uploading website, intended for personal use.
 
 This project was built as part of my Medium article series, "Cloud Storage is Broken. Here’s How I Built My Own." [you can read the first installation here](https://medium.com/@kieranmaher13/cloud-storage-is-broken-heres-how-i-built-my-own-90b94a0fe180).
