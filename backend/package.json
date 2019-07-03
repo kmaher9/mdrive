@@ -1,0 +1,40 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "a custom backend for a file upload website",
+  "main": "server.js",
+  "scripts": {
+    "serve": "nodemon ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kmaher9/mdrive.git"
+  },
+  "keywords": [
+    "drive",
+    "file",
+    "upload",
+    "storage"
+  ],
+  "author": "Kieran Maher",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kmaher9/mdrive/issues"
+  },
+  "homepage": "https://github.com/kmaher9/mdrive#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "busboy": "^0.3.1",
+    "connect-busboy": "0.0.2",
+    "connect-mongo": "^3.0.0",
+    "express": "^4.17.1",
+    "express-session": "^1.16.2",
+    "express-validator": "^6.1.1",
+    "moment": "^2.24.0",
+    "mongoose": "^5.6.2",
+    "morgan": "^1.9.1",
+    "node-pre-gyp": "^0.13.0",
+    "nodemon": "^1.19.1",
+    "validator": "^11.0.0"
+  }
+}
