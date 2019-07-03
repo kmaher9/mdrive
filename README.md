@@ -19,7 +19,7 @@ For development, you will only need Node.js and a node global package installed 
 
 Open `mdrive/backend/server.js` then edit the following line 12:
 
-    `const secret    = 'mdrive-secret'`
+    const secret    = 'mdrive-secret'
 
 To be your own custom secret for sessions.
 
