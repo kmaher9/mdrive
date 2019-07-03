@@ -1,7 +1,8 @@
-const file      = require('../models/file')
+const File      = require('../models/file')
 const Busboy    = require('busboy')
 const fs        = require('fs')
-exports.newFile = async function (request, response, next) {
+
+exports.newFile = function (request, response, next) {
     var busboy = new Busboy({ headers: request.headers })
 
     busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
@@ -12,12 +13,15 @@ exports.newFile = async function (request, response, next) {
                 }
             })
         } else {
+            File.create({
+                "name": filename,
+                "location": `../datum/${filename}`,
+                mime: mimetype
+            })
             const storeLocation = `../datum/${filename}`
             const stream        = fs.createWriteStream(storeLocation)   
             file.pipe(stream)
         }
-
-
     })
   
     busboy.on('finish', function() {
@@ -29,4 +33,27 @@ exports.newFile = async function (request, response, next) {
     })
   
     request.pipe(busboy)
+}
+
+exports.getFile = async function (request, response) {
+    let file = null 
+    try { file = await File.findById(request.params.id) } catch (err) {}
+
+    if (!file) {
+        return response.status(404).json({
+            "data": {
+                "error": "unable to find requested file"
+            }
+        })
+    }
+
+    var stat = fs.statSync(file.location)
+    response.writeHead(200, {
+        'Content-Type': file.mime,
+        'Content-Length': stat.size,
+        'Content-Disposition': `attachment;filename=${file.name}`
+    })
+
+    let stream = fs.createReadStream(file.location)
+    stream.pipe(response)
 }
