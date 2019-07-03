@@ -27,9 +27,7 @@ mongoose.connection.on('error', (err) => {
 app.use(logger('dev'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
-app.use(busboy({
-  highWaterMark: 2 * 1024 * 1024
-}))
+app.use(busboy({ highWaterMark: 2 * 1024 * 1024 }))
 app.use(session({
   resave: true,
   saveUninitialized: true,
@@ -47,7 +45,7 @@ app.use(function(req, res, next) {
   res.setHeader("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT,DELETE")
   res.setHeader("Access-Control-Allow-Headers", "x-access-token, Access-Control-Allow-Headers, Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers")
   next()
-});
+})
 
 // -----------------------------------------------------------------------------------------------------
 // Set up routing
