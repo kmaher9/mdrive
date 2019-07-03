@@ -57,3 +57,21 @@ exports.getFile = async function (request, response) {
     let stream = fs.createReadStream(file.location)
     stream.pipe(response)
 }
+
+exports.getFiles = async function (request, response) {
+    let files = await File.find({})
+
+    if (!files) {
+        return response.status(404).json({
+            "data": {
+                "message": "There are no uploaded files"
+            }
+        })
+    }
+
+    return response.status(200).json({
+        "data": {
+            "files": files
+        }
+    })
+}

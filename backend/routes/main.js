@@ -7,7 +7,8 @@ router.get('/', (request, response, next) => {
     })
 })
 
-router.post('/new-file', uploads.newFile)
+router.post('/file', uploads.newFile)
+router.get('/files', uploads.getFiles)
 router.get('/file/:id', uploads.getFile)
 
 module.exports = router
