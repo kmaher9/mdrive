@@ -41,3 +41,24 @@ exports.getFiles = async function (request, response) {
         }
     })
 }
+
+exports.removeFile = async function (request, response) {
+
+    let file = await File.findById(request.params.id)
+
+    if (!file) {
+        return response.status(500).json({
+            "data": {
+                "error": "unable to delete file"
+            }
+        })
+    }
+
+    fs.unlinkSync(file.location)
+    await File.findByIdAndDelete(file._id)
+    return response.status(200).json({
+        "data": {
+            "message": "file deleted"
+        }
+    })
+}

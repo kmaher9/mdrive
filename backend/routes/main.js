@@ -11,5 +11,6 @@ router.get('/', (request, response, next) => {
 router.post('/file', uploads.newFile)
 router.get('/files', serve.getFiles)
 router.get('/file/:id', serve.getFile)
+router.delete('/file/:id', serve.removeFile)
 
 module.exports = router

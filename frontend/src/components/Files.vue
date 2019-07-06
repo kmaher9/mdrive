@@ -16,10 +16,10 @@
         :search="search"
       >
         <template v-slot:items="props">
-          <td>{{ props.item.name }}</td>
+          <td class="text-truncate text-xs-left"><v-btn small flat @click="downloadFile(props.item._id, props.item.name)"><v-icon color="cyan darken-1">cloud_download</v-icon></v-btn>{{ props.item.name }}</td>
           <td class="text-xs-left">{{ props.item.mime }}</td>
           <td class="text-xs-left">{{ props.item.size }}</td>
-          <td class="text-xs-left">{{ props.item.createdAt }}</td>
+          <td class="text-xs">{{ props.item.createdAt }} <v-btn small flat @click="removeFile(props.item._id)"><v-icon color="red">remove</v-icon></v-btn></td>
         </template>
         <template v-slot:no-results>
           <v-alert :value="true" color="error" icon="warning">
@@ -68,9 +68,11 @@
 </template>
 
 <script>
+/* eslint-disable */
   import axios from 'axios'
   import moment from 'moment'
-    import FileSelect from './File.vue'
+  import FileSelect from './File.vue'
+  import FileDownload from 'js-file-download'
 
   export default {
     data () {
@@ -92,6 +94,24 @@
       FileSelect
     },
     methods: {
+      removeFile (id) {
+        axios.delete(`http://localhost:8888/api/file/${id}`)
+        .then(response => {
+          this.getData()
+        })
+        .catch(err => {
+          console.log(err.response)
+        })
+      },
+      downloadFile (id, filename) {
+        axios.get(`http://localhost:8888/api/file/${id}`, { responseType: 'arraybuffer'})
+        .then(response => {
+          FileDownload(response.data, filename)
+        })
+        .catch(err => {
+          console.log(err.response)
+        })
+      },
       submitFile () {
         this.error = false
         let f = this.file
@@ -108,9 +128,13 @@
           this.dialog = false
           this.getData()
         }, err => {
+          // eslint-disable-next-line
+          console.log(err.response)
           this.error = true
         })
         .catch(err => {
+          // eslint-disable-next-line
+          console.log(err.response)
           this.error = true
         })
       },
@@ -130,6 +154,9 @@
         })
       },
       convertSizeToHuman (size) {
+        if (size <= 0) {
+          return 'N/A'
+        }
         let i = Math.floor( Math.log(size) / Math.log(1024) )
         return ( size / Math.pow(1024, i) ).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i]
       },

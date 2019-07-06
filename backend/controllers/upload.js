@@ -23,21 +23,22 @@ exports.newFile = function (request, response, next) {
     })
   
     busboy.on('finish', function() {
-        try {
-            let stat = fs.statSync(`../uploads/${name}`)
-            File.create({
-                "name": name,
-                "location": `../uploads/${name}`,
-                "mime": mime,
-                "size": stat.size
-            })
-        } catch (err) { console.log(err) }
+        
+            
+        
          
       response.status(200).json({
         "data": {
           "message": "upload successful"
         }
       })
+      let stat = fs.statSync(`../uploads/${name}`)
+            File.create({
+                "name": name,
+                "location": `../uploads/${name}`,
+                "mime": mime,
+                "size": stat.size
+            })
     })
   
     request.pipe(busboy)
