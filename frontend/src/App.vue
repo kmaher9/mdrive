@@ -41,51 +41,18 @@
         </v-layout>
       </v-container>
     </v-content>
-    <v-btn
-      fab
-      bottom
-      right
-      color="cyan darken-1"
-      dark
-      fixed
-      class="mb-3"
-      large
-      @click="dialog = !dialog"
-    >
-      <v-icon>cloud_upload</v-icon>
-    </v-btn>
-    <v-dialog v-model="dialog" width="800px">
-      <v-card>
-        <v-card-title
-          class="cyan darken-1 py-4 white--text title"
-        >
-          Upload a New File
-        </v-card-title>
-        <v-container grid-list-sm class="pa-4">
-          <v-layout row wrap>
-            <v-flex xs12 align-center justify-center>
-              <p><file-select v-model="file"></file-select></p>
-            </v-flex>
-          </v-layout>
-        </v-container>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn flat color="black" @click="file = null; dialog = false">Cancel</v-btn>
-          <v-btn flat color="cyan darken-1" disabled v-if="file === null">Upload</v-btn>
-          <v-btn flat color="cyan darken-1" @click="submitFile()" v-else>Upload</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+
   </v-app>
 </template>
 
 <script>
   import Files from './components/Files.vue'
-  import FileSelect from './components/File.vue'
+
   export default {
     data: () => ({
       dialog: false,
       drawer: null,
+      error: false,
       items: [
         { icon: 'dashboard', text: 'Dashboard' },
         { icon: 'fiber_new', text: 'Recent Uploads' },
@@ -95,12 +62,13 @@
     }),
     components: {
       Files,
-      FileSelect
+      
     },
     methods: {
       submitFile () {
+        this.error = false
         let f = this.file
-        this.file = null
+        
 
         //
         let form = new FormData()
@@ -110,15 +78,14 @@
           headers: { 'Content-Type': 'multipart/form-data' }
         })
         .then(response => {
-          // eslint-disable-next-line
-          console.log(response)
+          this.file = null
+          this.dialog = false
+          this.$forceUpdate()
         }, err => {
-          // eslint-disable-next-line
-          console.log('error ' + err.resonse)
+          this.error = true
         })
         .catch(err => {
-          // eslint-disable-next-line
-          console.log(err.resonse)
+          this.error = true
         })
       }
     }
