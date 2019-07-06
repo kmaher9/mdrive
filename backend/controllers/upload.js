@@ -16,7 +16,8 @@ exports.newFile = function (request, response, next) {
             File.create({
                 "name": filename,
                 "location": `../datum/${filename}`,
-                "mime": mimetype
+                "mime": mimetype,
+                "encoding": encoding
             })
             const storeLocation = `../datum/${filename}`
             const stream        = fs.createWriteStream(storeLocation)   
