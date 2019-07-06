@@ -12,7 +12,10 @@ For development, you will only need Node.js and a node global package installed 
 ## Install
 
     $ git clone https://github.com/kmaher9/mdrive
-    $ cd mdrive
+    $ cd mdrive/backend
+    $ npm install
+    [open second terminal]
+    $ cd mdrive/frontend
     $ npm install
 
 ## Configure app
@@ -23,8 +26,20 @@ Open `mdrive/backend/server.js` then edit the following line 12:
 
 To be your own custom secret for sessions.
 
-## Running the project
+Finally you need to create a blank folder at the root named "Uploads". So your structure should sit like
 
+    mdrive/frontend
+    mdrive/backend
+    mdrive/uploads
+
+## Running the project 
+
+    $ cd backend
+    $ npm run serve
+    
+    [open second terminal]
+    
+    $ cd frontend
     $ npm run serve
 
 ## Simple build for production
