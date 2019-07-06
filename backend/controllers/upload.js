@@ -4,28 +4,32 @@ const fs        = require('fs')
 
 exports.newFile = function (request, response, next) {
     var busboy = new Busboy({ headers: request.headers })
-
+    let name = null
+    let mime = null
     busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
-        if (fs.existsSync(`../datum/${filename}`)) {
+        name = filename
+        mime = mimetype
+        if (fs.existsSync(`../uploads/${filename}`)) {
             return response.status(400).json({
                 "data": {
                     "error": "file already exists"
                 }
             })
         } else {
-            File.create({
-                "name": filename,
-                "location": `../datum/${filename}`,
-                "mime": mimetype,
-                "encoding": encoding
-            })
-            const storeLocation = `../datum/${filename}`
+            const storeLocation = `../uploads/${filename}`
             const stream        = fs.createWriteStream(storeLocation)   
             file.pipe(stream)
         }
     })
   
     busboy.on('finish', function() {
+        let stat = fs.statSync(`../uploads/${name}`)
+        File.create({
+            "name": name,
+            "location": `../uploads/${name}`,
+            "mime": mime,
+            "size": stat.size
+        })
       response.status(200).json({
         "data": {
           "message": "upload successful"
