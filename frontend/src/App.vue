@@ -57,63 +57,22 @@
     <v-dialog v-model="dialog" width="800px">
       <v-card>
         <v-card-title
-          class="grey lighten-4 py-4 title"
+          class="cyan darken-1 py-4 white--text title"
         >
-          Create contact
+          Upload a New File
         </v-card-title>
         <v-container grid-list-sm class="pa-4">
           <v-layout row wrap>
-            <v-flex xs12 align-center justify-space-between>
-              <v-layout align-center>
-                <v-avatar size="40px" class="mr-3">
-                  <img
-                    src="//ssl.gstatic.com/s2/oz/images/sge/grey_silhouette.png"
-                    alt=""
-                  >
-                </v-avatar>
-                <v-text-field
-                  placeholder="Name"
-                ></v-text-field>
-              </v-layout>
-            </v-flex>
-            <v-flex xs6>
-              <v-text-field
-                prepend-icon="business"
-                placeholder="Company"
-              ></v-text-field>
-            </v-flex>
-            <v-flex xs6>
-              <v-text-field
-                placeholder="Job title"
-              ></v-text-field>
-            </v-flex>
-            <v-flex xs12>
-              <v-text-field
-                prepend-icon="mail"
-                placeholder="Email"
-              ></v-text-field>
-            </v-flex>
-            <v-flex xs12>
-              <v-text-field
-                type="tel"
-                prepend-icon="phone"
-                placeholder="(000) 000 - 0000"
-                mask="phone"
-              ></v-text-field>
-            </v-flex>
-            <v-flex xs12>
-              <v-text-field
-                prepend-icon="notes"
-                placeholder="Notes"
-              ></v-text-field>
+            <v-flex xs12 align-center justify-center>
+              <p><file-select v-model="file"></file-select></p>
             </v-flex>
           </v-layout>
         </v-container>
         <v-card-actions>
-          <v-btn flat color="primary">More</v-btn>
           <v-spacer></v-spacer>
-          <v-btn flat color="primary" @click="dialog = false">Cancel</v-btn>
-          <v-btn flat @click="dialog = false">Save</v-btn>
+          <v-btn flat color="black" @click="file = null; dialog = false">Cancel</v-btn>
+          <v-btn flat color="cyan darken-1" disabled v-if="file === null">Upload</v-btn>
+          <v-btn flat color="cyan darken-1" @click="submitFile()" v-else>Upload</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -122,6 +81,7 @@
 
 <script>
   import Files from './components/Files.vue'
+  import FileSelect from './components/File.vue'
   export default {
     data: () => ({
       dialog: false,
@@ -130,10 +90,37 @@
         { icon: 'dashboard', text: 'Dashboard' },
         { icon: 'fiber_new', text: 'Recent Uploads' },
         { icon: 'settings', text: 'Settings' }
-      ]
+      ],
+      file: null
     }),
     components: {
-      Files
+      Files,
+      FileSelect
+    },
+    methods: {
+      submitFile () {
+        let f = this.file
+        this.file = null
+
+        //
+        let form = new FormData()
+        form.append('file', f)
+
+        axios.post('http://localhost:8888/api/file', form, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        })
+        .then(response => {
+          // eslint-disable-next-line
+          console.log(response)
+        }, err => {
+          // eslint-disable-next-line
+          console.log('error ' + err.resonse)
+        })
+        .catch(err => {
+          // eslint-disable-next-line
+          console.log(err.resonse)
+        })
+      }
     }
   }
 </script>
