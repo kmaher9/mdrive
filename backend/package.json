@@ -36,6 +36,6 @@
     "morgan": "^1.9.1",
     "node-pre-gyp": "^0.13.0",
     "nodemon": "^1.19.1",
-    "validator": "^11.0.0"
+    "validator": "^13.7.0"
   }
 }
